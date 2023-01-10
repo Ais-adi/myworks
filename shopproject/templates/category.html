@@ -1,0 +1,81 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block metadescription %}
+  {% if category %}
+   {{category.description|truncatewords:155}}
+  {% else %}
+    Welcome to  SWEET CAKES where you can identify the real taste....
+  {% endif %}
+{% endblock %}
+{% block title %}
+   {% if category %}
+     {{category.name}}-SWEET CAKES
+   {% else %}
+      <h1 style="color:Mediumvioletred">See our Delicious Cakes.......</h1><br>
+   {% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if category %}
+ <div>
+     <div class="row my_row_class">
+         <div class="max-auto">
+             <h1 style="color:black"><a href="{% url 'shopapp:allprodcat' %}">Our Product Collections</a> </h1><br>
+         </div>
+     </div>
+ </div>
+ {% endif %}
+<div class="auto-max">
+ {% if category %}
+     <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+   <br>
+   <div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p>
+   </div>
+{% else %}
+<div>
+    <div>
+    <center>
+        <img  src="{% static 'img/banner.png' %}"  width="100%" height="600pix"  border="5pix" alt="our products">
+
+    </center>
+        </div>
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title"> Our products Collections</h1><br>
+    <p class="text-justify" >There are two main types of cakes: butter cakes (also known as shortened cakes) and foam cakes. The distinction between these two broad categories of cake is in the fat content. Foam cakes have little to no fat, and usually have a larger proportion of egg. This gives them their lighter, airy texture (think angel food and sponge cake). Butter cakes on the other hand contain butter, margarine, or vegetable shortening, giving you the dense, moist cakes we know and love. There are endless variations of each of these major types</p>
+</div>
+{% endif %}
+<br>
+<br>
+<div class="container">
+    <div class="row max_auto">
+        {% for products in products.object_list %}
+        <div class="my_bottom_margin  col-sm-12 col-md-4 col-lg-4">
+            <div class="card text_center" style="min-width :18 rem">
+
+            <a href="{{products.get_url}}"><img class=' card-img-top fluid-img'src="{{products.image.url}}" width="250" height="250"  border="3pix" alt="{{products.name}}"></a>
+              <div class="card-body">
+            <h4>{{products.name}}</h4>
+                  <p>{{products.price}}</p></div>>
+        </div>
+        </div>
+        {% endfor %}
+
+        <div class="mx-auto">
+            {% if products.paginator.num_pages > 1 %}
+            <hr>
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg%}active{% endif %}">{{pg}}</a>
+                 {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
